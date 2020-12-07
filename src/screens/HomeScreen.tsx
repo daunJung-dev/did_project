@@ -1,6 +1,8 @@
 import { RouteProp } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, Text, Button } from 'react-native';
+import { useSetRecoilState } from 'recoil';
+import { authState } from '../recoil';
 
 export function HomeScreen({ navigation, route }: { navigation: any, route: RouteProp<any, any> }) {
  useEffect(() => {
@@ -8,14 +10,15 @@ export function HomeScreen({ navigation, route }: { navigation: any, route: Rout
    // post updated, do something with 'route.params.post'
    // For example, send the post to the server
   }
- }, [route.params?.post])
-
+ }, [route.params?.post]);
+ const setLoggedOut = useSetRecoilState(authState);
+ const logOut = useCallback(() => setLoggedOut({ logged: false }), [])
  return (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
    <Text>Home Screen</Text>
    <Button
-    title="Create post"
-    onPress={() => navigation.navigate('CreatePost')}
+    title="Logout"
+    onPress={logOut}
    />
    <Text style={{ margin: 10 }}>Post: {route.params?.post}</Text>
    {/* <Button
